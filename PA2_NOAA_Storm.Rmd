@@ -5,7 +5,7 @@ date: "April 22, 2015"
 output: html_document
 ---
 
-# IMPACT OF TORNADOS, HEAT ETC. ON PUBLIC HEALTH AND ECONOMIY IN THE US
+# IMPACT OF TORNADOS, HEAT ETC. ON PUBLIC HEALTH AND THE US ECONOMY
 Which event types (tornados, floods, heat etc.) are most harmful in respect to public health and the US economy?
 
 ## SYNOPSIS    
