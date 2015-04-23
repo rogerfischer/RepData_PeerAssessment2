@@ -5,7 +5,7 @@ date: "April 22, 2015"
 output: html_document
 ---
 
-# TITLE   
+# WHICH EVENT TYPES (TORNADOS, FLOODS, HEAT ETC.) ARE MOST HARMFUL IN RESPECT TO PUBLIC HEALTH AND THE ECONOMY IN THE UNITED STATES
 Title: Your document should have a title that briefly summarizes your data analysis
 
 ## SYNOPSIS    
@@ -105,10 +105,10 @@ We know have 19 event types that remain. Plotting can help to get a better pictu
 qplot(x = FATALITIES, y = INJURIES, data = harmful_4qu, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 ```
 
-The 3 most harmful events types are:
-Tornados
-Excessive Heat
-Heat
+The 3 most harmful events types are:   
+- Tornados    
+- Excessive Heat    
+- Heat    
 ```{r, echo=TRUE}
 most_harmful <- subset(harmful_small, EVTYPE == "TORNADO" | EVTYPE == "EXCESSIVE HEAT" | EVTYPE == "HEAT")
 qplot(x = INJURIES, y = FATALITIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
@@ -118,10 +118,5 @@ qplot(x = INJURIES, y = FATALITIES, data = most_harmful, facets = EVTYPE ~ . ,  
 There should be a section titled Results in which your results are presented.
 
 
-You can also embed plots, for example:
-
-```{r, echo=FALSE}
-some code
-```
 
 
