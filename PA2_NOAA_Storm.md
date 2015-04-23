@@ -5,8 +5,8 @@ date: "April 22, 2015"
 output: html_document
 ---
 
-# WHICH EVENT TYPES (TORNADOS, FLOODS, HEAT ETC.) ARE MOST HARMFUL IN RESPECT TO PUBLIC HEALTH AND THE ECONOMY IN THE UNITED STATES
-Title: Your document should have a title that briefly summarizes your data analysis
+# IMPACT OF TORNADOS, HEAT ETC. ON PUBLIC HEALTH AND ECONOMIY IN THE US
+Which event types (tornados, floods, heat etc.) are most harmful in respect to public health and the US economy?
 
 ## SYNOPSIS    
 Synopsis: Immediately after the title, there should be a synopsis which describes and summarizes your analysis in at most 10 complete sentences.
@@ -336,7 +336,7 @@ We know have 19 event types that remain. Plotting can help to get a better pictu
 qplot(x = FATALITIES, y = INJURIES, data = harmful_4qu, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+![plot of chunk most_dangerous](figure/most_dangerous-1.png) 
 
 The 3 most harmful events types are:   
 - Tornados    
@@ -345,10 +345,16 @@ The 3 most harmful events types are:
 
 ```r
 most_harmful <- subset(harmful_small, EVTYPE == "TORNADO" | EVTYPE == "EXCESSIVE HEAT" | EVTYPE == "HEAT")
-qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
+qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point", "smooth"))
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
+```
+## geom_smooth: method="auto" and size of largest group is <1000, so using loess. Use 'method = x' to change the smoothing method.
+## geom_smooth: method="auto" and size of largest group is <1000, so using loess. Use 'method = x' to change the smoothing method.
+## geom_smooth: method="auto" and size of largest group is >=1000, so using gam with formula: y ~ s(x, bs = "cs"). Use 'method = x' to change the smoothing method.
+```
+
+![plot of chunk tornado_heat](figure/tornado_heat-1.png) 
 
 ## RESULTS
 There should be a section titled Results in which your results are presented.

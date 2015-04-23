@@ -5,8 +5,8 @@ date: "April 22, 2015"
 output: html_document
 ---
 
-# WHICH EVENT TYPES (TORNADOS, FLOODS, HEAT ETC.) ARE MOST HARMFUL IN RESPECT TO PUBLIC HEALTH AND THE ECONOMY IN THE UNITED STATES
-Title: Your document should have a title that briefly summarizes your data analysis
+# IMPACT OF TORNADOS, HEAT ETC. ON PUBLIC HEALTH AND ECONOMIY IN THE US
+Which event types (tornados, floods, heat etc.) are most harmful in respect to public health and the US economy?
 
 ## SYNOPSIS    
 Synopsis: Immediately after the title, there should be a synopsis which describes and summarizes your analysis in at most 10 complete sentences.
@@ -101,7 +101,7 @@ harmful_evtypes2
 ```
 
 We know have 19 event types that remain. Plotting can help to get a better picture.
-```{r, echo=TRUE}
+```{r most_dangerous, echo=TRUE}
 qplot(x = FATALITIES, y = INJURIES, data = harmful_4qu, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 ```
 
@@ -109,9 +109,9 @@ The 3 most harmful events types are:
 - Tornados    
 - Excessive Heat    
 - Heat    
-```{r, echo=TRUE}
+```{r tornado_heat, echo=TRUE}
 most_harmful <- subset(harmful_small, EVTYPE == "TORNADO" | EVTYPE == "EXCESSIVE HEAT" | EVTYPE == "HEAT")
-qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
+qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point", "smooth"))
 ```
 
 ## RESULTS
