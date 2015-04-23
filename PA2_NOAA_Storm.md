@@ -345,7 +345,7 @@ The 3 most harmful events types are:
 
 ```r
 most_harmful <- subset(harmful_small, EVTYPE == "TORNADO" | EVTYPE == "EXCESSIVE HEAT" | EVTYPE == "HEAT")
-qplot(x = INJURIES, y = FATALITIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
+qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 ```
 
 ![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
@@ -353,8 +353,6 @@ qplot(x = INJURIES, y = FATALITIES, data = most_harmful, facets = EVTYPE ~ . ,  
 ## RESULTS
 There should be a section titled Results in which your results are presented.
 
-
-You can also embed plots, for example:
 
 
 

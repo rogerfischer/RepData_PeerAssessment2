@@ -111,7 +111,7 @@ The 3 most harmful events types are:
 - Heat    
 ```{r, echo=TRUE}
 most_harmful <- subset(harmful_small, EVTYPE == "TORNADO" | EVTYPE == "EXCESSIVE HEAT" | EVTYPE == "HEAT")
-qplot(x = INJURIES, y = FATALITIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
+qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 ```
 
 ## RESULTS
