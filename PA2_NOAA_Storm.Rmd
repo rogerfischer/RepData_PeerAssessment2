@@ -5,27 +5,26 @@ date: "April 22, 2015"
 output: html_document
 ---
 
-# TITLE
+# TITLE   
 Title: Your document should have a title that briefly summarizes your data analysis
 
-## SYNOPSIS
+## SYNOPSIS    
 Synopsis: Immediately after the title, there should be a synopsis which describes and summarizes your analysis in at most 10 complete sentences.
+QUESTIONS
+1. Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?
+2. Across the United States, which types of events have the greatest economic consequences?
 
 
 ## ASSIGNEMENT
 This project involves exploring the U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage.
-
-Your data analysis must address the following questions:
-
-1. Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?
-
-2. Across the United States, which types of events have the greatest economic consequences?
-
 Consider writing your report as if it were to be read by a government or municipal manager who might be responsible for preparing for severe weather events and will need to prioritize resources for different types of events. However, there is no need to make any specific recommendations in your report.
 
 
 ## DATA PROCESSING
-There should be a section titled Data Processing which describes (in words and code) how the data were loaded into R and processed for analysis. In particular, your analysis must start from the raw CSV file containing the data. You cannot do any preprocessing outside the document. If preprocessing is time-consuming you may consider using the cache = TRUE option for certain code chunks.
+The [Storm Data, (zip, 47Mb)]("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2") as well as the [National Weather Service Storm Data Documentation (PDF)]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf") and the [National Climatic Data Center Storm Events FAQ]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf") explaining the data have been downloaded. 
+
+To explore the storm data, we use the programming language R on an Apple computer as can be seen in the Session Info below.
+We use read.csv to load the zipped data and create the stormdata data frame. The data frame has 902'297 observations and 37 variables.
 
 
 ```{r}
@@ -54,10 +53,66 @@ stormdata <- read.csv("StormData.csv.bz2")
 dim(stormdata)
 summary(stormdata$EVTYPE)
 summary(stormdata$FATALITIES)
+sum_fatalities <- sum(stormdata$FATALITIES)
+sum_fatalities
 summary(stormdata$INJURIES)
-
+sum_injuries <- sum(stormdata$INJURIES)
+sum_injuries 
 ```
 
+As we want to answer the question: "Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?", we first  create a subset of the data by selecting all events which have fatalities or injuries greater than zero. We already know that the total of all injuries is 140'528 and the total of all fatalities is 15'145.
+
+```{r, echo=TRUE}
+class(stormdata$FATALITIES)
+class(stormdata$INJURIES)
+harmful <- subset(stormdata, stormdata$FATALITIES > 0 & stormdata$INJURIES > 0)
+dim(harmful)
+```
+
+Then we filter out only the three columns needed to answer the question. Tornado looks immediately like a category with a lot of fatalities and injuries.
+
+```{r, echo=TRUE}
+harmful_small <- harmful[, c("BGN_DATE", "EVTYPE", "FATALITIES", "INJURIES")]
+summary(harmful_small)
+
+## Tornado Subset
+harmful_tornado <- subset(harmful_small, EVTYPE == "TORNADO")
+dim(harmful_tornado)
+summary(harmful_tornado)
+tornado_fatalities <- sum(harmful_tornado$FATALITIES)
+tornado_fatalities
+tornado_injuries <- sum(harmful_tornado$INJURIES)
+tornado_injuries
+```
+
+Tornado is definitely one of the more harmful event types, as evidenced by the fatalities, 5'227 of 15'415 total, and the injuries, 60'187 from total 140'528. Next to that others will pale in comparison. We will now look at event types with fatalities and injuries higher then the 3rd quartile, as seen in summary(harmful_small). 
+
+```{r, echo=TRUE}
+# over the 3rd quartile
+harmful_4qu <- subset(harmful_small, FATALITIES > 2 & INJURIES > 20)
+dim(harmful_4qu)
+harmful_evtypes <- unique(harmful_4qu$EVTYPE)
+harmful_evtypes
+# over the mean
+harmful_mean <- subset(harmful_small, FATALITIES > 2.862 & INJURIES > 29.82)
+dim(harmful_mean)
+harmful_evtypes2 <- unique(harmful_mean$EVTYPE)
+harmful_evtypes2
+```
+
+We know have 19 event types that remain. Plotting can help to get a better picture.
+```{r, echo=TRUE}
+qplot(x = FATALITIES, y = INJURIES, data = harmful_4qu, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
+```
+
+The 3 most harmful events types are:
+Tornados
+Excessive Heat
+Heat
+```{r, echo=TRUE}
+most_harmful <- subset(harmful_small, EVTYPE == "TORNADO" | EVTYPE == "EXCESSIVE HEAT" | EVTYPE == "HEAT")
+qplot(x = INJURIES, y = FATALITIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
+```
 
 ## RESULTS
 There should be a section titled Results in which your results are presented.
@@ -66,7 +121,7 @@ There should be a section titled Results in which your results are presented.
 You can also embed plots, for example:
 
 ```{r, echo=FALSE}
-plot(cars)
+some code
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
