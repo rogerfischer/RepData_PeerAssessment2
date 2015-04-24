@@ -2,7 +2,6 @@
 title: "PA2_NOAA_Storm.Rmd"
 author: "Roger Fischer"
 date: "April 22, 2015"
-output: html_document
 ---
 
 # IMPACT OF TORNADOS, HEAT ETC. ON PUBLIC HEALTH AND THE US ECONOMY
@@ -21,7 +20,7 @@ Consider writing your report as if it were to be read by a government or municip
 
 
 ## DATA PROCESSING
-The [Storm Data, (zip, 47Mb)]("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2") as well as the [National Weather Service Storm Data Documentation (PDF)]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf") and the [National Climatic Data Center Storm Events FAQ]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf") explaining the data have been downloaded. 
+The [Storm Data, zip, 47Mb]("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2") as well as the [National Weather Service Storm Data Documentation, PDF]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf") and the [National Climatic Data Center Storm Events FAQ]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf") explaining the data have been downloaded. 
 
 To explore the storm data, we use the programming language R on an Apple computer as can be seen in the Session Info below.
 We use read.csv to load the zipped data and create the stormdata data frame. The data frame has 902'297 observations and 37 variables.
@@ -260,13 +259,13 @@ harmful_evtypes2
 
 We know have 19 event types that remain. Plotting can help to get a better picture.
 
+
 ```r
+library(ggplot2)
 qplot(x = FATALITIES, y = INJURIES, data = harmful_4qu, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 ```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "qplot"
-```
+![plot of chunk most_dangerous](figure/most_dangerous-1.png) 
 
 The 3 most harmful events types are:   
 - Tornados    
@@ -275,12 +274,10 @@ The 3 most harmful events types are:
 
 ```r
 most_harmful <- subset(harmful_small, EVTYPE == "TORNADO" | EVTYPE == "EXCESSIVE HEAT" | EVTYPE == "HEAT")
-qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point", "smooth"))
+qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 ```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "qplot"
-```
+![plot of chunk tornado_heat](figure/tornado_heat-1.png) 
 
 ## RESULTS
 There should be a section titled Results in which your results are presented.
