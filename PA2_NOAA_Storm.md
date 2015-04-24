@@ -5,7 +5,7 @@ date: "April 22, 2015"
 output: html_document
 ---
 
-# IMPACT OF TORNADOS, HEAT ETC. ON PUBLIC HEALTH AND ECONOMIY IN THE US
+# IMPACT OF TORNADOS, HEAT ETC. ON PUBLIC HEALTH AND THE US ECONOMY
 Which event types (tornados, floods, heat etc.) are most harmful in respect to public health and the US economy?
 
 ## SYNOPSIS    
@@ -59,87 +59,21 @@ dim(stormdata)
 ```
 
 ```r
-summary(stormdata$EVTYPE)
-```
-
-```
-##                     HAIL                TSTM WIND        THUNDERSTORM WIND 
-##                   288661                   219940                    82563 
-##                  TORNADO              FLASH FLOOD                    FLOOD 
-##                    60652                    54277                    25326 
-##       THUNDERSTORM WINDS                HIGH WIND                LIGHTNING 
-##                    20843                    20212                    15754 
-##               HEAVY SNOW               HEAVY RAIN             WINTER STORM 
-##                    15708                    11723                    11433 
-##           WINTER WEATHER             FUNNEL CLOUD         MARINE TSTM WIND 
-##                     7026                     6839                     6175 
-## MARINE THUNDERSTORM WIND               WATERSPOUT              STRONG WIND 
-##                     5812                     3796                     3566 
-##     URBAN/SML STREAM FLD                 WILDFIRE                 BLIZZARD 
-##                     3392                     2761                     2719 
-##                  DROUGHT                ICE STORM           EXCESSIVE HEAT 
-##                     2488                     2006                     1678 
-##               HIGH WINDS         WILD/FOREST FIRE             FROST/FREEZE 
-##                     1533                     1457                     1342 
-##                DENSE FOG       WINTER WEATHER/MIX           TSTM WIND/HAIL 
-##                     1293                     1104                     1028 
-##  EXTREME COLD/WIND CHILL                     HEAT                HIGH SURF 
-##                     1002                      767                      725 
-##           TROPICAL STORM           FLASH FLOODING             EXTREME COLD 
-##                      690                      682                      655 
-##            COASTAL FLOOD         LAKE-EFFECT SNOW        FLOOD/FLASH FLOOD 
-##                      650                      636                      624 
-##                LANDSLIDE                     SNOW          COLD/WIND CHILL 
-##                      600                      587                      539 
-##                      FOG              RIP CURRENT              MARINE HAIL 
-##                      538                      470                      442 
-##               DUST STORM                AVALANCHE                     WIND 
-##                      427                      386                      340 
-##             RIP CURRENTS              STORM SURGE            FREEZING RAIN 
-##                      304                      261                      250 
-##              URBAN FLOOD     HEAVY SURF/HIGH SURF        EXTREME WINDCHILL 
-##                      249                      228                      204 
-##             STRONG WINDS           DRY MICROBURST    ASTRONOMICAL LOW TIDE 
-##                      196                      186                      174 
-##                HURRICANE              RIVER FLOOD               LIGHT SNOW 
-##                      174                      173                      154 
-##         STORM SURGE/TIDE            RECORD WARMTH         COASTAL FLOODING 
-##                      148                      146                      143 
-##               DUST DEVIL         MARINE HIGH WIND        UNSEASONABLY WARM 
-##                      141                      135                      126 
-##                 FLOODING   ASTRONOMICAL HIGH TIDE        MODERATE SNOWFALL 
-##                      120                      103                      101 
-##           URBAN FLOODING               WINTRY MIX        HURRICANE/TYPHOON 
-##                       98                       90                       88 
-##            FUNNEL CLOUDS               HEAVY SURF              RECORD HEAT 
-##                       87                       84                       81 
-##                   FREEZE                HEAT WAVE                     COLD 
-##                       74                       74                       72 
-##              RECORD COLD                      ICE  THUNDERSTORM WINDS HAIL 
-##                       64                       61                       61 
-##      TROPICAL DEPRESSION                    SLEET         UNSEASONABLY DRY 
-##                       60                       59                       56 
-##                    FROST              GUSTY WINDS      THUNDERSTORM WINDSS 
-##                       53                       53                       51 
-##       MARINE STRONG WIND                    OTHER               SMALL HAIL 
-##                       48                       48                       47 
-##                   FUNNEL             FREEZING FOG             THUNDERSTORM 
-##                       46                       45                       45 
-##       Temperature record          TSTM WIND (G45)         Coastal Flooding 
-##                       43                       39                       38 
-##              WATERSPOUTS    MONTHLY PRECIPITATION                    WINDS 
-##                       37                       36                       36 
-##                  (Other) 
-##                     2940
-```
-
-```r
+## summary(stormdata$EVTYPE)
 summary(stormdata$FATALITIES)
 ```
 
 ```
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 ##   0.0000   0.0000   0.0000   0.0168   0.0000 583.0000
+```
+
+```r
+class(stormdata$FATALITIES)
+```
+
+```
+## [1] "numeric"
 ```
 
 ```r
@@ -161,6 +95,14 @@ summary(stormdata$INJURIES)
 ```
 
 ```r
+class(stormdata$INJURIES)
+```
+
+```
+## [1] "numeric"
+```
+
+```r
 sum_injuries <- sum(stormdata$INJURIES)
 sum_injuries 
 ```
@@ -169,24 +111,10 @@ sum_injuries
 ## [1] 140528
 ```
 
+
+## HARMFUL EVENTS (INJURIES, FATALITIES)
 As we want to answer the question: "Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?", we first  create a subset of the data by selecting all events which have fatalities or injuries greater than zero. We already know that the total of all injuries is 140'528 and the total of all fatalities is 15'145.
 
-
-```r
-class(stormdata$FATALITIES)
-```
-
-```
-## [1] "numeric"
-```
-
-```r
-class(stormdata$INJURIES)
-```
-
-```
-## [1] "numeric"
-```
 
 ```r
 harmful <- subset(stormdata, stormdata$FATALITIES > 0 & stormdata$INJURIES > 0)
@@ -275,7 +203,7 @@ tornado_injuries
 ## [1] 60187
 ```
 
-Tornado is definitely one of the more harmful event types, as evidenced by the fatalities, 5'227 of 15'415 total, and the injuries, 60'187 from total 140'528. Next to that others will pale in comparison. We will now look at event types with fatalities and injuries higher then the 3rd quartile, as seen in summary(harmful_small). 
+Tornado is definitely one of the more harmful event types, as evidenced by the fatalities, 5'227 of 15'415 total, and the injuries, 60'187 from total 140'528. Next to that others will pale in comparison. We will now look at event types with fatalities and injuries higher then the 3rd quartile and higher as the mean, as seen in summary(harmful_small). 
 
 
 ```r
@@ -336,7 +264,9 @@ We know have 19 event types that remain. Plotting can help to get a better pictu
 qplot(x = FATALITIES, y = INJURIES, data = harmful_4qu, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 ```
 
-![plot of chunk most_dangerous](figure/most_dangerous-1.png) 
+```
+## Error in eval(expr, envir, enclos): could not find function "qplot"
+```
 
 The 3 most harmful events types are:   
 - Tornados    
@@ -349,12 +279,8 @@ qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  
 ```
 
 ```
-## geom_smooth: method="auto" and size of largest group is <1000, so using loess. Use 'method = x' to change the smoothing method.
-## geom_smooth: method="auto" and size of largest group is <1000, so using loess. Use 'method = x' to change the smoothing method.
-## geom_smooth: method="auto" and size of largest group is >=1000, so using gam with formula: y ~ s(x, bs = "cs"). Use 'method = x' to change the smoothing method.
+## Error in eval(expr, envir, enclos): could not find function "qplot"
 ```
-
-![plot of chunk tornado_heat](figure/tornado_heat-1.png) 
 
 ## RESULTS
 There should be a section titled Results in which your results are presented.

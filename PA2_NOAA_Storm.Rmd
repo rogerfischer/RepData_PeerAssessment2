@@ -51,20 +51,22 @@ stormdata <- read.csv("StormData.csv.bz2")
 
 ## Early Exploration
 dim(stormdata)
-summary(stormdata$EVTYPE)
+## summary(stormdata$EVTYPE)
 summary(stormdata$FATALITIES)
+class(stormdata$FATALITIES)
 sum_fatalities <- sum(stormdata$FATALITIES)
 sum_fatalities
 summary(stormdata$INJURIES)
+class(stormdata$INJURIES)
 sum_injuries <- sum(stormdata$INJURIES)
 sum_injuries 
 ```
 
+
+## HARMFUL EVENTS (INJURIES, FATALITIES)
 As we want to answer the question: "Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?", we first  create a subset of the data by selecting all events which have fatalities or injuries greater than zero. We already know that the total of all injuries is 140'528 and the total of all fatalities is 15'145.
 
 ```{r, echo=TRUE}
-class(stormdata$FATALITIES)
-class(stormdata$INJURIES)
 harmful <- subset(stormdata, stormdata$FATALITIES > 0 & stormdata$INJURIES > 0)
 dim(harmful)
 ```
@@ -85,7 +87,7 @@ tornado_injuries <- sum(harmful_tornado$INJURIES)
 tornado_injuries
 ```
 
-Tornado is definitely one of the more harmful event types, as evidenced by the fatalities, 5'227 of 15'415 total, and the injuries, 60'187 from total 140'528. Next to that others will pale in comparison. We will now look at event types with fatalities and injuries higher then the 3rd quartile, as seen in summary(harmful_small). 
+Tornado is definitely one of the more harmful event types, as evidenced by the fatalities, 5'227 of 15'415 total, and the injuries, 60'187 from total 140'528. Next to that others will pale in comparison. We will now look at event types with fatalities and injuries higher then the 3rd quartile and higher as the mean, as seen in summary(harmful_small). 
 
 ```{r, echo=TRUE}
 # over the 3rd quartile
