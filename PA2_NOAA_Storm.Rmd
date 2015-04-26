@@ -11,8 +11,6 @@ The two main questions are:
 To answer the first question in detail, we encourage you to check HARMFUL EVENTS BY INJURIES, FATALITIES. And following THE IMPACT ON THE ECONOMY you will get a detailed answer to the second.
 
 
-
-
 ## DATA PROCESSING
 The [Storm Data, zip, 47Mb]("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"), as well as the [National Weather Service Storm Data Documentation, PDF]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf") and the [National Climatic Data Center Storm Events FAQ]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf") explaining the data, have been downloaded with download.file. 
 
@@ -104,19 +102,21 @@ qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  
 
 
 ## THE IMPACT ON THE ECONOMY
+To be able to discuss the economic impact of different event types, we first need to find the damage variables.    
+Here they are:
 
-
-Property Damage   
+Property Damage Variables  
 - PROPDMG   
 - PROPMGEXP 
 
-Crop Damage   
+Crop Damage Variables  
 - CROPDMG   
 - CROPDMGEXP
 
-10.00K = $10'000
-10.00M = $10'000'000
-10.00B = $10'000'000'000 ???
+EXP = Exponent
+- 10.00K = $10'000    
+- 10.00M = $10'000'000     
+- 10.00B = $10'000'000'000 ???, this is to prove    
 
 ```{r, echo=TRUE}
 table(stormdata$PROPDMGEXP)
@@ -130,23 +130,49 @@ dim(b_damage)
 # b_damage[4, c(2, 8, 23:28, 36) ] # $2.1 billion dollars
 ```
 
+B in the exponent variables (PROPDMGEXP, CROPDMGEXP) means billion, but as we will see below, this is not always true. High numbers do not correspond to billions.
+
 ```{r, echo=TRUE}
 dmgB <- subset(stormdata, stormdata$PROPDMGEXP == "B" & stormdata$PROPDMG > 0 | stormdata$CROPDMGEXP == "B" & stormdata$CROPDMG > 0)
 dim(dmgB)
 dmgB_small <- dmgB[ , c(2, 8, 23:28)]
 summary(dmgB_small)
-flood <- subset(dmgB_small, dmgB_small$EVTYPE == "FLOOD")
-flood[, c(2, 8, 23:28, 36) ] 
+dmgB_small
 
-qplot(x = PROPDMG, y = CROPDMG, data = dmgB_small, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
+## Checking for outliers
+
+# Checking flood with 115 B
+# flood <- subset(dmgB, dmgB$EVTYPE == "FLOOD")
+# flood[ 2, c(2, 8, 23:28, 36)] # is a wrong outlier, $6 Mio, $70 Mio and $115 Billion !!!
+
+# Checking Ice Storm with 5 B
+# icestorm <- subset(dmgB, dmgB$EVTYPE == "ICE STORM")
+# icestorm[ , c(2, 8, 23:28, 36)] # it's $500 Mio damage to utilities, not $5.5 Million crop damage by year/over 10 years
+
+# Getting a visual feel of the frequency of the billion dollar events
+# qplot(x = BGN_DATE, y = CROPDMG, data = dmgB_small, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
+# qplot(x = BGN_DATE, y = PROPDMG, data = dmgB_small, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 ```
 ```
-
-The 
+Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hurricane/Typhons, Tropical Storms are the most frequent billion dollar damage causing event types. Next to that tornados and floods can also billion dollar huge economic impacts. 
 
 ## RESULTS
-There should be a section titled Results in which your results are presented.
+Our results for the two questions:
+1. Across the United States, which types of events are most harmful with respect to population health?
+In regard to population health (fatalities and injuries combined) we found that the theses 3 event types are the most harmful 
+- Tornados    
+- Excessive Heat    
+- Heat  
 
+2. Across the United States, which types of events have the greatest economic consequences?
+In regard to economic consequences we found that these 3 event types have the highest economic impact:
+- Hurricanes and Typhons
+- Tornados
+- Floods
+
+Hurricanes and Typhons are also the most frequent and so their economic impact is the highest by event but also overall. Tornados in 2011 also had a high economic impact next to causing a lot of fatalities and injuries. In comparison to the first question, it is however much more difficult to foresee future events. Several event types can cause major economic damage at any moment. 
+
+The increase in billion dollar damage events is also quite striking, they all happened between 1993 and 2011. Looking at this data, it is relatively easy to predict that billion dollar damage events will be with us for foreseeable future.
 
 
 
