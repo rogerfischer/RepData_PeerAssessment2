@@ -509,15 +509,15 @@ Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hur
 Our results for the two questions:   
 Across the United States, which types of events are most harmful with respect to population health?
 In regard to population health (fatalities and injuries combined) we found that the theses 3 event types are the most harmful     
-- Tornados    
-- Excessive Heat
-- Heat  
-
+* Tornados  
+* Excessive Heat
+* Heat
+   
 Across the United States, which types of events have the greatest economic consequences?     
-In regard to economic consequences we found that these 3 event types have the highest economic impact:
-- Hurricanes and Typhons
-- Tornados
-- Floods
+In regard to economic consequences we found that these 3 event types have the highest economic impact:    
+* Hurricanes and Typhons 
+* Tornados
+* Floods  
 
 Hurricanes and Typhons are also the most frequent and so their economic impact is the highest by event but also overall. Tornados in 2011 also had a high economic impact next to causing a lot of fatalities and injuries. In comparison to the first question, it is however much more difficult to foresee future events. Several event types can cause major economic damage at any moment. 
 
