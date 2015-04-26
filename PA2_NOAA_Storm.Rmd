@@ -158,14 +158,14 @@ dmgB_small
 Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hurricane/Typhons, Tropical Storms are the most frequent billion dollar damage causing event types. Next to that tornados and floods can also billion dollar huge economic impacts. 
 
 ## RESULTS
-Our results for the two questions:
+Our results for the two questions:   
 1. Across the United States, which types of events are most harmful with respect to population health?
-In regard to population health (fatalities and injuries combined) we found that the theses 3 event types are the most harmful 
+In regard to population health (fatalities and injuries combined) we found that the theses 3 event types are the most harmful     
 - Tornados    
 - Excessive Heat    
 - Heat  
 
-2. Across the United States, which types of events have the greatest economic consequences?
+2. Across the United States, which types of events have the greatest economic consequences?     
 In regard to economic consequences we found that these 3 event types have the highest economic impact:
 - Hurricanes and Typhons
 - Tornados
@@ -173,7 +173,7 @@ In regard to economic consequences we found that these 3 event types have the hi
 
 Hurricanes and Typhons are also the most frequent and so their economic impact is the highest by event but also overall. Tornados in 2011 also had a high economic impact next to causing a lot of fatalities and injuries. In comparison to the first question, it is however much more difficult to foresee future events. Several event types can cause major economic damage at any moment. 
 
-The increase in billion dollar damage events is also quite striking, they all happened between 1993 and 2011. Looking at this data, it is relatively easy to predict that billion dollar damage events will be with us for foreseeable future.
+The increase in billion dollar damage events is also quite striking, they all happened between 1993 and 2011. Looking at this data, it is relatively easy to predict that billion dollar damage events will be with us for the foreseeable future.
 
 
 
