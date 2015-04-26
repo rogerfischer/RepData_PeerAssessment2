@@ -7,7 +7,8 @@ date: "April 22, 2015"
 # IMPACT OF TORNADOS, HEAT ETC. ON PUBLIC HEALTH AND THE US ECONOMY
 Which event types (tornados, floods, heat etc.) are most harmful in respect to public health and the US economy?
 
-## SYNOPSIS    
+## SYNOPSIS 
+The events start in the year 1950 and end in November 2011.
 Synopsis: Immediately after the title, there should be a synopsis which describes and summarizes your analysis in at most 10 complete sentences.
 QUESTIONS
 1. Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?
@@ -20,7 +21,7 @@ Consider writing your report as if it were to be read by a government or municip
 
 
 ## DATA PROCESSING
-The [Storm Data, zip, 47Mb]("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2") as well as the [National Weather Service Storm Data Documentation, PDF]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf") and the [National Climatic Data Center Storm Events FAQ]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf") explaining the data have been downloaded. 
+The [Storm Data, zip, 47Mb]("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"), as well as the [National Weather Service Storm Data Documentation, PDF]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf") and the [National Climatic Data Center Storm Events FAQ]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf") explaining the data, have been downloaded with download.file. 
 
 To explore the storm data, we use the programming language R on an Apple computer as can be seen in the Session Info below.
 We use read.csv to load the zipped data and create the stormdata data frame. The data frame has 902'297 observations and 37 variables.
@@ -31,19 +32,28 @@ We use read.csv to load the zipped data and create the stormdata data frame. The
 ## rm(list=ls())
 ## setwd("/Users/rogerfischer/datasciencecoursera/repdata/RepData_PeerAssessment2")
 
-## sessionInfo()
+## Session Info about tools used (OS, R version, R packages, etc.)
+sessionInfo()
+```
+
+```
 ## R version 3.1.2 (2014-10-31)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-
+## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
+## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
-
+## 
 ## other attached packages:
-## [1] ggplot2_1.0.0 dplyr_0.4.1   knitr_1.9   
+## [1] knitr_1.9
+## 
+## loaded via a namespace (and not attached):
+## [1] evaluate_0.5.5 formatR_1.0    stringr_0.6.2  tools_3.1.2
+```
 
+```r
 ## Storm Data, 47Mb, zipped with bzip2 algorithm
 download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2", "StormData.csv.bz2", method="curl")
 ## read.csv can read zipped files directly
@@ -111,7 +121,7 @@ sum_injuries
 ```
 
 
-## HARMFUL EVENTS (INJURIES, FATALITIES)
+## HARMFUL EVENTS BY INJURIES, FATALITIES
 As we want to answer the question: "Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?", we first  create a subset of the data by selecting all events which have fatalities or injuries greater than zero. We already know that the total of all injuries is 140'528 and the total of all fatalities is 15'145.
 
 
@@ -228,7 +238,7 @@ harmful_evtypes
 ## [13] FOG                   FLASH FLOOD           FLOOD                
 ## [16] WILDFIRE              HURRICANE/TYPHOON     TSUNAMI              
 ## [19] THUNDERSTORM WIND    
-## 985 Levels:    HIGH SURF ADVISORY  COASTAL FLOOD ... WND
+## 985 Levels:    HIGH SURF ADVISORY  COASTAL FLOOD  FLASH FLOOD ... WND
 ```
 
 ```r
@@ -254,7 +264,7 @@ harmful_evtypes2
 ## [13] FLASH FLOOD           FLOOD                 FOG                  
 ## [16] WILDFIRE              HURRICANE/TYPHOON     TSUNAMI              
 ## [19] THUNDERSTORM WIND    
-## 985 Levels:    HIGH SURF ADVISORY  COASTAL FLOOD ... WND
+## 985 Levels:    HIGH SURF ADVISORY  COASTAL FLOOD  FLASH FLOOD ... WND
 ```
 
 We know have 19 event types that remain. Plotting can help to get a better picture.
@@ -278,6 +288,64 @@ qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  
 ```
 
 ![plot of chunk tornado_heat](figure/tornado_heat-1.png) 
+
+
+## THE IMPACT ON THE ECONOMY
+Property Damage   
+- PROPDMG   
+- PROPMGEXP 
+
+Crop Damage   
+- CROPDMG   
+- CROPDMGEXP
+
+10.00K = $10'000
+10.00M = $10'000'000
+10.00B = $10'000'000'000 ???
+
+
+```r
+table(stormdata$PROPDMGEXP)
+```
+
+```
+## 
+##             -      ?      +      0      1      2      3      4      5      6 
+## 465934      1      8      5    216     25     13      4      4     28      4 
+##      7      8      B      h      H      K      m      M 
+##      5      1     40      1      6 424665      7  11330
+```
+
+```r
+table(stormdata$CROPDMGEXP)
+```
+
+```
+## 
+##             ?      0      2      B      k      K      m      M 
+## 618413      7     19      1      9     21 281832      1   1994
+```
+
+```r
+b_damage <- subset(stormdata, PROPDMGEXP == "B" | CROPDMGEXP == "B")
+dim(b_damage)
+```
+
+```
+## [1] 47 37
+```
+
+```r
+## B is definitely Billion
+# b_damage[1, c(2, 8, 23:28, 36) ] # Estimates between $50 and $100 million 
+# b_damage[3, c(2, 8, 23:28, 36) ] # $400 Million Crop Damage
+# b_damage[4, c(2, 8, 23:28, 36) ] # $2.1 billion dollars
+```
+
+
+```r
+dmgB <- subset(stormdata, stormdata$PROPDMGEXP == "B" | stormdata$CROPDMGEXP == "B")
+```
 
 ## RESULTS
 There should be a section titled Results in which your results are presented.

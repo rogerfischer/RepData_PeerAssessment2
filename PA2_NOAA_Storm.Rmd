@@ -1,26 +1,20 @@
----
-title: "PA2_NOAA_Storm.Rmd"
-author: "Roger Fischer"
-date: "April 22, 2015"
----
-
 # IMPACT OF TORNADOS, HEAT ETC. ON PUBLIC HEALTH AND THE US ECONOMY
 Which event types (tornados, floods, heat etc.) are most harmful in respect to public health and the US economy?
 
-## SYNOPSIS    
-Synopsis: Immediately after the title, there should be a synopsis which describes and summarizes your analysis in at most 10 complete sentences.
-QUESTIONS
-1. Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?
+## SYNOPSIS 
+To discuss the above, we use the events from the U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage. The dataset used here starts in the year 1950 and ends in November 2011.
+
+The two main questions are: 
+1. Across the United States, which types of events are most harmful with respect to population health?
 2. Across the United States, which types of events have the greatest economic consequences?
 
+To answer the first question in detail, we encourage you to check HARMFUL EVENTS BY INJURIES, FATALITIES. And following THE IMPACT ON THE ECONOMY you will get a detailed answer to the second.
 
-## ASSIGNEMENT
-This project involves exploring the U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage.
-Consider writing your report as if it were to be read by a government or municipal manager who might be responsible for preparing for severe weather events and will need to prioritize resources for different types of events. However, there is no need to make any specific recommendations in your report.
+
 
 
 ## DATA PROCESSING
-The [Storm Data, zip, 47Mb]("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2") as well as the [National Weather Service Storm Data Documentation, PDF]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf") and the [National Climatic Data Center Storm Events FAQ]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf") explaining the data have been downloaded. 
+The [Storm Data, zip, 47Mb]("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"), as well as the [National Weather Service Storm Data Documentation, PDF]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf") and the [National Climatic Data Center Storm Events FAQ]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf") explaining the data, have been downloaded with download.file. 
 
 To explore the storm data, we use the programming language R on an Apple computer as can be seen in the Session Info below.
 We use read.csv to load the zipped data and create the stormdata data frame. The data frame has 902'297 observations and 37 variables.
@@ -30,18 +24,9 @@ We use read.csv to load the zipped data and create the stormdata data frame. The
 ## rm(list=ls())
 ## setwd("/Users/rogerfischer/datasciencecoursera/repdata/RepData_PeerAssessment2")
 
-## sessionInfo()
-## R version 3.1.2 (2014-10-31)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-
-## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
-
-## other attached packages:
-## [1] ggplot2_1.0.0 dplyr_0.4.1   knitr_1.9   
+## Session Info about tools used (OS, R version, R packages, etc.)
+sessionInfo()
+  
 
 ## Storm Data, 47Mb, zipped with bzip2 algorithm
 download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2", "StormData.csv.bz2", method="curl")
@@ -62,7 +47,7 @@ sum_injuries
 ```
 
 
-## HARMFUL EVENTS (INJURIES, FATALITIES)
+## HARMFUL EVENTS BY INJURIES, FATALITIES
 As we want to answer the question: "Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?", we first  create a subset of the data by selecting all events which have fatalities or injuries greater than zero. We already know that the total of all injuries is 140'528 and the total of all fatalities is 15'145.
 
 ```{r, echo=TRUE}
@@ -116,6 +101,48 @@ The 3 most harmful events types are:
 most_harmful <- subset(harmful_small, EVTYPE == "TORNADO" | EVTYPE == "EXCESSIVE HEAT" | EVTYPE == "HEAT")
 qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 ```
+
+
+## THE IMPACT ON THE ECONOMY
+
+
+Property Damage   
+- PROPDMG   
+- PROPMGEXP 
+
+Crop Damage   
+- CROPDMG   
+- CROPDMGEXP
+
+10.00K = $10'000
+10.00M = $10'000'000
+10.00B = $10'000'000'000 ???
+
+```{r, echo=TRUE}
+table(stormdata$PROPDMGEXP)
+table(stormdata$CROPDMGEXP)
+b_damage <- subset(stormdata, PROPDMGEXP == "B" | CROPDMGEXP == "B")
+dim(b_damage)
+
+## B is definitely Billion
+# b_damage[1, c(2, 8, 23:28, 36) ] # Estimates between $50 and $100 million 
+# b_damage[3, c(2, 8, 23:28, 36) ] # $400 Million Crop Damage
+# b_damage[4, c(2, 8, 23:28, 36) ] # $2.1 billion dollars
+```
+
+```{r, echo=TRUE}
+dmgB <- subset(stormdata, stormdata$PROPDMGEXP == "B" & stormdata$PROPDMG > 0 | stormdata$CROPDMGEXP == "B" & stormdata$CROPDMG > 0)
+dim(dmgB)
+dmgB_small <- dmgB[ , c(2, 8, 23:28)]
+summary(dmgB_small)
+flood <- subset(dmgB_small, dmgB_small$EVTYPE == "FLOOD")
+flood[, c(2, 8, 23:28, 36) ] 
+
+qplot(x = PROPDMG, y = CROPDMG, data = dmgB_small, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
+```
+```
+
+The 
 
 ## RESULTS
 There should be a section titled Results in which your results are presented.
