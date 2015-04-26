@@ -12,7 +12,7 @@ To answer the first question in detail, we encourage you to check HARMFUL EVENTS
 
 
 ## DATA PROCESSING
-The [Storm Data, zip, 47Mb]("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"), as well as the [National Weather Service Storm Data Documentation, PDF]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf") and the [National Climatic Data Center Storm Events FAQ]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf") explaining the data, have been downloaded with download.file. 
+The [Storm Data, Zip, 47Mb](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2) , as well as the [National Weather Service Storm Data Documentation, PDF](https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf) and the [National Climatic Data Center Storm Events FAQ](https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf) explaining the data, have been downloaded with *download.file*. 
 
 To explore the storm data, we use the programming language R on an Apple computer as can be seen in the Session Info below.
 We use read.csv to load the zipped data and create the stormdata data frame. The data frame has 902'297 observations and 37 variables.
@@ -157,7 +157,7 @@ dmgB_small
 ```
     
      
-Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hurricane/Typhons, Tropical Storms are the most frequent billion dollar damage causing event types. Next to that tornados and floods can also have billion dollar huge economic impacts. 
+Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hurricane/Typhons, Tropical Storms are the most frequent billion dollar damage causing event types. Next to that, tornados and floods can also have billion dollar huge economic impacts. 
 
 ## RESULTS
 Our results for the two questions:   
