@@ -153,7 +153,8 @@ dmgB_small
 # qplot(x = BGN_DATE, y = CROPDMG, data = dmgB_small, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 # qplot(x = BGN_DATE, y = PROPDMG, data = dmgB_small, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c("point"))
 ```
-```
+    
+     
 Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hurricane/Typhons, Tropical Storms are the most frequent billion dollar damage causing event types. Next to that tornados and floods can also billion dollar huge economic impacts. 
 
 ## RESULTS
