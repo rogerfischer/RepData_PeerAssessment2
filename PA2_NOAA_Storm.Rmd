@@ -118,6 +118,8 @@ EXP = Exponent
 - 10.00M = $10'000'000     
 - 10.00B = $10'000'000'000 ???, this is to prove    
 
+We take damage in the billions as our measure to qualify the most economically harmful events. There are obviously other ways (for example long tail cumulated damages).
+
 ```{r, echo=TRUE}
 table(stormdata$PROPDMGEXP)
 table(stormdata$CROPDMGEXP)
@@ -155,7 +157,7 @@ dmgB_small
 ```
     
      
-Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hurricane/Typhons, Tropical Storms are the most frequent billion dollar damage causing event types. Next to that tornados and floods can also billion dollar huge economic impacts. 
+Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hurricane/Typhons, Tropical Storms are the most frequent billion dollar damage causing event types. Next to that tornados and floods can also have billion dollar huge economic impacts. 
 
 ## RESULTS
 Our results for the two questions:   
