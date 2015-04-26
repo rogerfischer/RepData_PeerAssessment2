@@ -12,7 +12,7 @@ To answer the first question in detail, we encourage you to check HARMFUL EVENTS
 
 
 ## DATA PROCESSING
-The [Storm Data, zip, 47Mb]("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"), as well as the [National Weather Service Storm Data Documentation, PDF]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf") and the [National Climatic Data Center Storm Events FAQ]("https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf") explaining the data, have been downloaded with download.file. 
+The [Storm Data, Zip, 47Mb](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2) , as well as the [National Weather Service Storm Data Documentation, PDF](https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf) and the [National Climatic Data Center Storm Events FAQ](https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf) explaining the data, have been downloaded with *download.file*. 
 
 To explore the storm data, we use the programming language R on an Apple computer as can be seen in the Session Info below.
 We use read.csv to load the zipped data and create the stormdata data frame. The data frame has 902'297 observations and 37 variables.
@@ -129,7 +129,7 @@ dim(harmful)
 ## [1] 2649   37
 ```
 
-Then we filter out only the three columns needed to answer the question. Tornado looks immediately like a category with a lot of fatalities and injuries.
+Then we filter out only the three columns needed to answer the question plus the date. Tornado immediately looks like a category with a lot of fatalities and injuries.
 
 
 ```r
@@ -207,7 +207,7 @@ tornado_injuries
 ## [1] 60187
 ```
 
-Tornado is definitely one of the more harmful event types, as evidenced by the fatalities, 5'227 of 15'415 total, and the injuries, 60'187 from total 140'528. Next to that others will pale in comparison. We will now look at event types with fatalities and injuries higher then the 3rd quartile and higher as the mean, as seen in summary(harmful_small). 
+Tornado is definitely one of the more harmful event types, as evidenced by the fatalities, 5'227 of 15'415 total, and the injuries, 60'187 from total 140'528. Next to that, others will pale in comparison. We will now look at event types with fatalities and injuries higher then the 3rd quartile and higher as the mean, as seen in summary(harmful_small) above. 
 
 
 ```r
@@ -237,7 +237,7 @@ harmful_evtypes
 ```
 
 ```r
-# over the mean
+# over the mean, as a cross check
 harmful_mean <- subset(harmful_small, FATALITIES > 2.862 & INJURIES > 29.82)
 dim(harmful_mean)
 ```
@@ -262,7 +262,7 @@ harmful_evtypes2
 ## 985 Levels:    HIGH SURF ADVISORY  COASTAL FLOOD ... WND
 ```
 
-We know have 19 event types that remain. Plotting can help to get a better picture.
+We know have 19 event types that remain. Plotting will help us to get a better picture.
 
 
 ```r
@@ -275,7 +275,8 @@ qplot(x = FATALITIES, y = INJURIES, data = harmful_4qu, facets = EVTYPE ~ . ,  c
 The 3 most harmful events types are:   
 - Tornados    
 - Excessive Heat    
-- Heat    
+- Heat 
+
 
 ```r
 most_harmful <- subset(harmful_small, EVTYPE == "TORNADO" | EVTYPE == "EXCESSIVE HEAT" | EVTYPE == "HEAT")
@@ -286,8 +287,7 @@ qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  
 
 
 ## THE IMPACT ON THE ECONOMY
-To be able to discuss the economic impact of different event types, we first need to find the damage variables.    
-Here they are:
+To be able to discuss the economic impact of different event types, we first need to find the damage variables. Here they are:   
 
 Property Damage Variables  
 - PROPDMG   
@@ -301,6 +301,8 @@ EXP = Exponent
 - 10.00K = $10'000    
 - 10.00M = $10'000'000     
 - 10.00B = $10'000'000'000 ???, this is to prove    
+
+We take damage in the billions as our measure to qualify the most economically harmful events. There are obviously other ways (for example long tail cumulated damages).
 
 
 ```r
@@ -341,7 +343,7 @@ dim(b_damage)
 # b_damage[4, c(2, 8, 23:28, 36) ] # $2.1 billion dollars
 ```
 
-B in the exponent variables (PROPDMGEXP, CROPDMGEXP) means billion, but as we will see below, this is not always true. High numbers do not correspond to billions.
+B in the exponent variables (PROPDMGEXP, CROPDMGEXP) means billion, but as we will see below, this is not always true. High numbers over hundred do definitely not correspond to billions.
 
 
 ```r
@@ -489,7 +491,7 @@ dmgB_small
 
 # Checking flood with 115 B
 # flood <- subset(dmgB, dmgB$EVTYPE == "FLOOD")
-# flood[ 2, c(2, 8, 23:28, 36)] # is a wrong outlier, $6 Mio, $70 Mio and $115 Billion !!!
+# flood[ 2, c(2, 8, 23:28, 36)] # is a wrong outlier, $6 Mio, $70 Mio vs $115 Billion !!!
 
 # Checking Ice Storm with 5 B
 # icestorm <- subset(dmgB, dmgB$EVTYPE == "ICE STORM")
@@ -501,17 +503,17 @@ dmgB_small
 ```
     
      
-Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hurricane/Typhons, Tropical Storms are the most frequent billion dollar damage causing event types. Next to that tornados and floods can also billion dollar huge economic impacts. 
+Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hurricane/Typhons, Tropical Storms are the most frequent billion dollar damage causing event types. Next to that, tornados and floods can also have billion dollar huge economic impacts. 
 
 ## RESULTS
-Our results for the two questions:
-1. Across the United States, which types of events are most harmful with respect to population health?
-In regard to population health (fatalities and injuries combined) we found that the theses 3 event types are the most harmful 
+Our results for the two questions:   
+Across the United States, which types of events are most harmful with respect to population health?
+In regard to population health (fatalities and injuries combined) we found that the theses 3 event types are the most harmful     
 - Tornados    
-- Excessive Heat    
+- Excessive Heat
 - Heat  
 
-2. Across the United States, which types of events have the greatest economic consequences?
+Across the United States, which types of events have the greatest economic consequences?     
 In regard to economic consequences we found that these 3 event types have the highest economic impact:
 - Hurricanes and Typhons
 - Tornados
@@ -519,7 +521,7 @@ In regard to economic consequences we found that these 3 event types have the hi
 
 Hurricanes and Typhons are also the most frequent and so their economic impact is the highest by event but also overall. Tornados in 2011 also had a high economic impact next to causing a lot of fatalities and injuries. In comparison to the first question, it is however much more difficult to foresee future events. Several event types can cause major economic damage at any moment. 
 
-The increase in billion dollar damage events is also quite striking, they all happened between 1993 and 2011. Looking at this data, it is relatively easy to predict that billion dollar damage events will be with us for foreseeable future.
+The increase in billion dollar damage events is also quite striking, all "B" events happened between 1993 and 2011. Looking at this data, it is relatively easy to predict that billion dollar damage events will be with us for the foreseeable future.
 
 
 

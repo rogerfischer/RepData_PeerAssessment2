@@ -217,7 +217,7 @@ hr {
 
 <h2>DATA PROCESSING</h2>
 
-<p>The <a href="%22https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2%22">Storm Data, zip, 47Mb</a>, as well as the <a href="%22https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf%22">National Weather Service Storm Data Documentation, PDF</a> and the <a href="%22https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf%22">National Climatic Data Center Storm Events FAQ</a> explaining the data, have been downloaded with download.file. </p>
+<p>The <a href="https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2">Storm Data, Zip, 47Mb</a> , as well as the <a href="https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf">National Weather Service Storm Data Documentation, PDF</a> and the <a href="https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf">National Climatic Data Center Storm Events FAQ</a> explaining the data, have been downloaded with <em>download.file</em>. </p>
 
 <p>To explore the storm data, we use the programming language R on an Apple computer as can be seen in the Session Info below.
 We use read.csv to load the zipped data and create the stormdata data frame. The data frame has 902&#39;297 observations and 37 variables.</p>
@@ -313,7 +313,7 @@ dim(harmful)
 <pre><code>## [1] 2649   37
 </code></pre>
 
-<p>Then we filter out only the three columns needed to answer the question. Tornado looks immediately like a category with a lot of fatalities and injuries.</p>
+<p>Then we filter out only the three columns needed to answer the question plus the date. Tornado immediately looks like a category with a lot of fatalities and injuries.</p>
 
 <pre><code class="r">harmful_small &lt;- harmful[, c(&quot;BGN_DATE&quot;, &quot;EVTYPE&quot;, &quot;FATALITIES&quot;, &quot;INJURIES&quot;)]
 summary(harmful_small)
@@ -380,7 +380,7 @@ tornado_injuries
 <pre><code>## [1] 60187
 </code></pre>
 
-<p>Tornado is definitely one of the more harmful event types, as evidenced by the fatalities, 5&#39;227 of 15&#39;415 total, and the injuries, 60&#39;187 from total 140&#39;528. Next to that others will pale in comparison. We will now look at event types with fatalities and injuries higher then the 3rd quartile and higher as the mean, as seen in summary(harmful_small). </p>
+<p>Tornado is definitely one of the more harmful event types, as evidenced by the fatalities, 5&#39;227 of 15&#39;415 total, and the injuries, 60&#39;187 from total 140&#39;528. Next to that, others will pale in comparison. We will now look at event types with fatalities and injuries higher then the 3rd quartile and higher as the mean, as seen in summary(harmful_small) above. </p>
 
 <pre><code class="r"># over the 3rd quartile
 harmful_4qu &lt;- subset(harmful_small, FATALITIES &gt; 2 &amp; INJURIES &gt; 20)
@@ -404,7 +404,7 @@ harmful_evtypes
 ## 985 Levels:    HIGH SURF ADVISORY  COASTAL FLOOD ... WND
 </code></pre>
 
-<pre><code class="r"># over the mean
+<pre><code class="r"># over the mean, as a cross check
 harmful_mean &lt;- subset(harmful_small, FATALITIES &gt; 2.862 &amp; INJURIES &gt; 29.82)
 dim(harmful_mean)
 </code></pre>
@@ -426,7 +426,7 @@ harmful_evtypes2
 ## 985 Levels:    HIGH SURF ADVISORY  COASTAL FLOOD ... WND
 </code></pre>
 
-<p>We know have 19 event types that remain. Plotting can help to get a better picture.</p>
+<p>We know have 19 event types that remain. Plotting will help us to get a better picture.</p>
 
 <pre><code class="r">library(ggplot2)
 qplot(x = FATALITIES, y = INJURIES, data = harmful_4qu, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c(&quot;point&quot;))
@@ -439,7 +439,7 @@ qplot(x = FATALITIES, y = INJURIES, data = harmful_4qu, facets = EVTYPE ~ . ,  c
 <ul>
 <li>Tornados<br/></li>
 <li>Excessive Heat<br/></li>
-<li>Heat<br/></li>
+<li>Heat </li>
 </ul>
 
 <pre><code class="r">most_harmful &lt;- subset(harmful_small, EVTYPE == &quot;TORNADO&quot; | EVTYPE == &quot;EXCESSIVE HEAT&quot; | EVTYPE == &quot;HEAT&quot;)
@@ -450,8 +450,7 @@ qplot(x = FATALITIES, y = INJURIES, data = most_harmful, facets = EVTYPE ~ . ,  
 
 <h2>THE IMPACT ON THE ECONOMY</h2>
 
-<p>To be able to discuss the economic impact of different event types, we first need to find the damage variables.<br/>
-Here they are:</p>
+<p>To be able to discuss the economic impact of different event types, we first need to find the damage variables. Here they are:   </p>
 
 <p>Property Damage Variables  </p>
 
@@ -474,6 +473,8 @@ Here they are:</p>
 <li>10.00M = $10&#39;000&#39;000<br/></li>
 <li>10.00B = $10&#39;000&#39;000&#39;000 ???, this is to prove<br/></li>
 </ul>
+
+<p>We take damage in the billions as our measure to qualify the most economically harmful events. There are obviously other ways (for example long tail cumulated damages).</p>
 
 <pre><code class="r">table(stormdata$PROPDMGEXP)
 </code></pre>
@@ -506,7 +507,7 @@ dim(b_damage)
 # b_damage[4, c(2, 8, 23:28, 36) ] # $2.1 billion dollars
 </code></pre>
 
-<p>B in the exponent variables (PROPDMGEXP, CROPDMGEXP) means billion, but as we will see below, this is not always true. High numbers do not correspond to billions.</p>
+<p>B in the exponent variables (PROPDMGEXP, CROPDMGEXP) means billion, but as we will see below, this is not always true. High numbers over hundred do definitely not correspond to billions.</p>
 
 <pre><code class="r">dmgB &lt;- subset(stormdata, stormdata$PROPDMGEXP == &quot;B&quot; &amp; stormdata$PROPDMG &gt; 0 | stormdata$CROPDMGEXP == &quot;B&quot; &amp; stormdata$CROPDMG &gt; 0)
 dim(dmgB)
@@ -646,7 +647,7 @@ summary(dmgB_small)
 
 # Checking flood with 115 B
 # flood &lt;- subset(dmgB, dmgB$EVTYPE == &quot;FLOOD&quot;)
-# flood[ 2, c(2, 8, 23:28, 36)] # is a wrong outlier, $6 Mio, $70 Mio and $115 Billion !!!
+# flood[ 2, c(2, 8, 23:28, 36)] # is a wrong outlier, $6 Mio, $70 Mio vs $115 Billion !!!
 
 # Checking Ice Storm with 5 B
 # icestorm &lt;- subset(dmgB, dmgB$EVTYPE == &quot;ICE STORM&quot;)
@@ -657,31 +658,32 @@ summary(dmgB_small)
 # qplot(x = BGN_DATE, y = PROPDMG, data = dmgB_small, facets = EVTYPE ~ . ,  color = EVTYPE, geom =   c(&quot;point&quot;))
 </code></pre>
 
-<p>Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hurricane/Typhons, Tropical Storms are the most frequent billion dollar damage causing event types. Next to that tornados and floods can also billion dollar huge economic impacts. </p>
+<p>Looking at the data of dmgB_small and the summary of dmgB_small, Hurricanes, Hurricane/Typhons, Tropical Storms are the most frequent billion dollar damage causing event types. Next to that, tornados and floods can also have billion dollar huge economic impacts. </p>
 
 <h2>RESULTS</h2>
 
-<p>Our results for the two questions:
-1. Across the United States, which types of events are most harmful with respect to population health?
-In regard to population health (fatalities and injuries combined) we found that the theses 3 event types are the most harmful </p>
+<p>Our results for the two questions:<br/>
+Across the United States, which types of events are most harmful with respect to population health?
+In regard to population health (fatalities and injuries combined) we found that the theses 3 event types are the most harmful     </p>
 
 <ul>
 <li>Tornados<br/></li>
-<li>Excessive Heat<br/></li>
+<li>Excessive Heat</li>
 <li>Heat<br/></li>
 </ul>
 
-<ol>
-<li>Across the United States, which types of events have the greatest economic consequences?
-In regard to economic consequences we found that these 3 event types have the highest economic impact:</li>
+<p>Across the United States, which types of events have the greatest economic consequences?<br/>
+In regard to economic consequences we found that these 3 event types have the highest economic impact:</p>
+
+<ul>
 <li>Hurricanes and Typhons</li>
 <li>Tornados</li>
 <li>Floods</li>
-</ol>
+</ul>
 
 <p>Hurricanes and Typhons are also the most frequent and so their economic impact is the highest by event but also overall. Tornados in 2011 also had a high economic impact next to causing a lot of fatalities and injuries. In comparison to the first question, it is however much more difficult to foresee future events. Several event types can cause major economic damage at any moment. </p>
 
-<p>The increase in billion dollar damage events is also quite striking, they all happened between 1993 and 2011. Looking at this data, it is relatively easy to predict that billion dollar damage events will be with us for foreseeable future.</p>
+<p>The increase in billion dollar damage events is also quite striking, all &ldquo;B&rdquo; events happened between 1993 and 2011. Looking at this data, it is relatively easy to predict that billion dollar damage events will be with us for the foreseeable future.</p>
 
 </body>
 
